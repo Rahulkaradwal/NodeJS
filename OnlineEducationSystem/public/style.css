@@ -1,36 +1,74 @@
 body {
-  text-align: center;
-  margin: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url("Signin.jpg"); /* Replace with your desired background image */
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
+}
+
+.background {
+}
+.container {
+  width: 450px;
+  max-width: 90%;
+  background-color: rgba(237, 185, 117, 0.8);
+  backdrop-filter: blur(5px);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
 }
 
-input {
-  padding: 5px;
-  width: 200px;
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  background-color: rgba(226, 198, 162, 0.8);
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px 20px;
+  display: block;
+  width: 100%;
+  padding: 10px;
   background-color: #333;
   color: #fff;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-a {
+.signin-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+}
+
+.signin-link a {
   color: #333;
   text-decoration: none;
 }
 
-a:hover {
+.signin-link a:hover {
   text-decoration: underline;
 }
