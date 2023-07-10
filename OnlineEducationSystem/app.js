@@ -1,12 +1,24 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const MongoClient = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
 
 const mongoURI =
   "mongodb+srv://rahulkaradwal:14%40February@cluster0.4cjd0lx.mongodb.net/mydatabase?retryWrites=true&w=majority";
 
 const dbName = "mydatabase";
+
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
 // Set up body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,78 +27,72 @@ app.use(bodyParser.json());
 // Serve static files from the "public" directory
 app.use(express.static("public"));
 
-// Connect to MongoDB
-MongoClient.connect(mongoURI, { useUnifiedTopology: true }, (err, client) => {
-  if (err) {
-    console.error("Failed to connect to MongoDB:", err);
-    return;
-  }
+// Create a Mongoose schema for users
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+});
 
-  console.log("Connected to MongoDB");
+// Create a Mongoose model for users
+const User = mongoose.model("User", userSchema);
+// Signup route
+app.post("/signup", (req, res) => {
+  const { name, email, password } = req.body;
 
-  const db = client.db(dbName);
-  const usersCollection = db.collection("users");
-
-  // Signup route
-  app.post("/signup", (req, res) => {
-    const { name, email, password } = req.body;
-
-    // Check if user already exists
-    usersCollection.findOne({ email }, (err, user) => {
-      if (err) {
-        console.error("Error checking user:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
+  // Check if user already exists
+  User.findOne({ email })
+    .then((user) => {
       if (user) {
         res.status(409).send("User already exists");
         return;
       }
 
       // Create new user
-      const newUser = {
+      const newUser = new User({
         name,
         email,
         password,
-      };
-
-      usersCollection.insertOne(newUser, (err) => {
-        if (err) {
-          console.error("Error creating user:", err);
-          res.status(500).send("Internal Server Error");
-          return;
-        }
-
-        res.redirect("/signin.html");
       });
+
+      newUser
+        .save()
+        .then(() => {
+          res.redirect("/signin.html");
+        })
+        .catch((error) => {
+          console.error("Error creating user:", error);
+          res.status(500).send("Internal Server Error");
+        });
+    })
+    .catch((error) => {
+      console.error("Error checking user:", error);
+      res.status(500).send("Internal Server Error");
     });
-  });
+});
 
-  // Signin route
-  app.post("/signin", (req, res) => {
-    const { email, password } = req.body;
+// Signin route
+app.post("/signin", (req, res) => {
+  const { email, password } = req.body;
 
-    // Find user by email
-    usersCollection.findOne({ email }, (err, user) => {
-      if (err) {
-        console.error("Error finding user:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
+  // Find user by email
+  User.findOne({ email })
+    .then((user) => {
       if (!user || user.password !== password) {
         res.status(401).send("Invalid credentials");
         return;
       }
 
       res.redirect("/dashboard.html");
+    })
+    .catch((error) => {
+      console.error("Error finding user:", error);
+      res.status(500).send("Internal Server Error");
     });
-  });
+});
 
-  // Start the server
-  const port = 3000;
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
+// Start the server
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
