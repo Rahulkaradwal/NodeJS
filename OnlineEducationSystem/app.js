@@ -32,10 +32,18 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
+  role: String,
+  courseEnrolled: String,
 });
 
 // Create a Mongoose model for users
 const User = mongoose.model("User", userSchema);
+
+// Index route
+app.get("/", (req, res) => {
+  res.redirect("/index.html");
+});
+
 // Signup route
 app.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
@@ -58,7 +66,13 @@ app.post("/signup", (req, res) => {
       newUser
         .save()
         .then(() => {
-          res.redirect("/signin.html");
+          if (req.body.role === "student") {
+            res.redirect("/signup.html");
+          } else if (req.body.role === "teacher") {
+            res.redirect("/teacher_signup.html");
+          } else {
+            res.redirect("/signin.html");
+          }
         })
         .catch((error) => {
           console.error("Error creating user:", error);

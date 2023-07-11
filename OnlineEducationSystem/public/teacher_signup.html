@@ -2,12 +2,12 @@
 <html>
   <head>
     <title>Online Education System - Signup</title>
-    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
     <div class="container background">
-      <h1>Student SignUp</h1>
-      <form action="/signup/teacher" method="POST">
+      <h1>Signup</h1>
+      <form action="/signup" method="POST">
         <div class="form-group">
           <label for="name">Name:</label>
           <input type="text" id="name" name="name" required />
@@ -19,17 +19,21 @@
         <div class="form-group">
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
-          <input type="hidden" id="role" name="role" value="teacher" />
-          <label for="coursesteach">Courses Teaching:</label>
-          <input type="text" id="coursesteach" name="coursesteach" required />
-          <input type="hidden" id="teacherId" name="teacherId" />
         </div>
+        <div class="form-group">
+          <label for="role">Role:</label>
+          <input type="text" id="role" name="role" value="teacher" readonly />
+        </div>
+        <div class="form-group">
+          <label for="courseTeach">Courses Teaching</label>
+          <input type="text" id="courseTeach" name="courseTeach" />
+        </div>
+
         <button type="submit" class="btn btn-primary">Signup</button>
       </form>
       <p class="signin-link">
         Already have an account? <a href="teacher_signin.html">Sign in</a>
       </p>
     </div>
-    <script src="../script.js"></script>
   </body>
 </html>
