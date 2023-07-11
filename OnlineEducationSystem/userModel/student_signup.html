@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Online Education System - Signup</title>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+  </head>
+  <body>
+    <div class="container background">
+      <h1>Student SignUp</h1>
+      <form action="/signup/student" method="POST">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+          <input type="hidden" id="role" name="role" value="student" />
+          <label for="coursesEnrolled">Courses Enrolled:</label>
+          <input
+            type="text"
+            id="coursesEnrolled"
+            name="coursesEnrolled"
+            required
+          />
+          <input type="hidden" id="studentId" name="studentId" />
+        </div>
+        <button type="submit" class="btn btn-primary">Signup</button>
+      </form>
+      <p class="signin-link">
+        Already have an account? <a href="signin.html">Sign in</a>
+      </p>
+    </div>
+    <script src="../script.js"></script>
+  </body>
+</html>
