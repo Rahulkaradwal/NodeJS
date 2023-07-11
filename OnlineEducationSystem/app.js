@@ -32,8 +32,13 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  role: String,
+  role: {
+    type: String,
+    enum: ["student", "teacher"],
+    required: true,
+  },
   courseEnrolled: String,
+  courseTeach: String,
 });
 
 // Create a Mongoose model for users
@@ -46,7 +51,7 @@ app.get("/", (req, res) => {
 
 // Signup route
 app.post("/signup", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role, courseEnrolled, courseTeach } = req.body;
 
   // Check if user already exists
   User.findOne({ email })
@@ -61,15 +66,18 @@ app.post("/signup", (req, res) => {
         name,
         email,
         password,
+        role,
+        courseEnrolled,
+        courseTeach,
       });
 
       newUser
         .save()
         .then(() => {
-          if (req.body.role === "student") {
-            res.redirect("/signup.html");
-          } else if (req.body.role === "teacher") {
-            res.redirect("/teacher_signup.html");
+          if (role === "student") {
+            res.redirect("/signin.html");
+          } else if (role === "teacher") {
+            res.redirect("/teacher_signin.html");
           } else {
             res.redirect("/signin.html");
           }
