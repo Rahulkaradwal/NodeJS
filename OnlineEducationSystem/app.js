@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const mongoURI =
   "mongodb+srv://rahulkaradwal:14%40February@cluster0.4cjd0lx.mongodb.net/mydatabase?retryWrites=true&w=majority";
@@ -26,6 +27,10 @@ app.use(bodyParser.json());
 
 // Serve static files from the "public" directory
 app.use(express.static("public"));
+
+// Set the views directory and view engine for EJS
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // Create a Mongoose schema for users
 const userSchema = new mongoose.Schema({
@@ -88,6 +93,7 @@ app.post("/signup", (req, res) => {
 });
 
 // Signin route
+// Signin route
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
 
@@ -100,9 +106,23 @@ app.post("/signin", (req, res) => {
       }
 
       if (user.role === "student") {
-        res.redirect("/student_dashboard.html");
+        User.find({ role: "student" })
+          .then((students) => {
+            res.render("student_dashboard", { students });
+          })
+          .catch((error) => {
+            console.error("Error finding students:", error);
+            res.status(500).send("Internal Server Error");
+          });
       } else if (user.role === "teacher") {
-        res.redirect("/teacher_dashboard.html");
+        User.find({ role: "teacher" })
+          .then((teachers) => {
+            res.render("teacher_dashboard", { teachers });
+          })
+          .catch((error) => {
+            console.error("Error finding teachers:", error);
+            res.status(500).send("Internal Server Error");
+          });
       } else {
         res.status(401).send("Invalid user role");
       }
