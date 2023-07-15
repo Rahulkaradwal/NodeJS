@@ -3,7 +3,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("Signin.jpg"); /* Replace with your desired background image */
+  background-image: url("Signin.jpg");
   background-size: cover;
   background-position: center;
   font-family: Arial, sans-serif;
