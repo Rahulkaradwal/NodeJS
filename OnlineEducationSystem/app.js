@@ -105,7 +105,13 @@ app.post("/signin", (req, res) => {
         return;
       }
 
-      res.redirect("/dashboard.html");
+      if (user.role === "student") {
+        res.redirect("/student_dashboard.html");
+      } else if (user.role === "teacher") {
+        res.redirect("/teacher_dashboard.html");
+      } else {
+        res.status(401).send("Invalid user role");
+      }
     })
     .catch((error) => {
       console.error("Error finding user:", error);

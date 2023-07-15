@@ -3,6 +3,40 @@
   <head>
     <title>Online Education System - Signup</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <style>
+      .checkbox-group label {
+        display: inline-block;
+        margin-right: 10px;
+      }
+    </style>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const studentRadio = document.getElementById("studentRadio");
+        const teacherRadio = document.getElementById("teacherRadio");
+        const courseEnrolledInput = document.getElementById("courseEnrolled");
+        const courseTeachingInput = document.getElementById("courseTeach");
+        const courseEnrolledLabel = document.querySelector(
+          "label[for='courseEnrolled']"
+        );
+        const courseTeachingLabel = document.querySelector(
+          "label[for='courseTeach']"
+        );
+
+        studentRadio.addEventListener("change", () => {
+          courseEnrolledInput.style.display = "block";
+          courseTeachingInput.style.display = "none";
+          courseEnrolledLabel.style.display = "block";
+          courseTeachingLabel.style.display = "none";
+        });
+
+        teacherRadio.addEventListener("change", () => {
+          courseEnrolledInput.style.display = "none";
+          courseTeachingInput.style.display = "block";
+          courseEnrolledLabel.style.display = "none";
+          courseTeachingLabel.style.display = "block";
+        });
+      });
+    </script>
   </head>
   <body>
     <div class="container background">
@@ -22,11 +56,34 @@
         </div>
         <div class="form-group">
           <label for="role">Role:</label>
-          <input type="text" id="role" name="role" value="student" readonly />
+          <div class="checkbox-group">
+            <label>
+              <input
+                type="radio"
+                id="studentRadio"
+                name="role"
+                value="student"
+              />
+              Student
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="teacherRadio"
+                name="role"
+                value="teacher"
+              />
+              Teacher
+            </label>
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group course-enrolled" id="courseEnrolledContainer">
           <label for="courseEnrolled">Course Enrolled:</label>
           <input type="text" id="courseEnrolled" name="courseEnrolled" />
+        </div>
+        <div class="form-group course-teaching" id="courseTeachingContainer">
+          <label for="courseTeach">Courses Teaching:</label>
+          <input type="text" id="courseTeach" name="courseTeach" />
         </div>
 
         <button type="submit" class="btn btn-primary">Signup</button>

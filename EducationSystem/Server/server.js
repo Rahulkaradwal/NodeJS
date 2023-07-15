@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const mongoURI =
   "mongodb+srv://rahulkaradwal:14%40February@cluster0.4cjd0lx.mongodb.net/mydatabase?retryWrites=true&w=majority";
@@ -20,14 +21,17 @@ mongoose
     console.error("Error connecting to MongoDB:", error);
   });
 
-app.get("/", (req, res) => {
-  // Handle root URL request
-  res.send("Welcome to the API");
+// Serve static assets from the "client/build" directory
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+// Serve the manifest.json file
+app.get("/manifest.json", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/public/manifest.json"));
 });
 
-app.get("/api", (req, res) => {
-  // Handle "/api" endpoint request
-  res.json({ users: ["Rahul", "Mohit", "Karadwal"] });
+// For any other request, serve the React application
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/public/index.html"));
 });
 
 const port = 5000;

@@ -1,23 +1,41 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import StudentSignIn from "./StudentSignIn";
+import TeacherSignIn from "./StudentSignIn";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [selectedRole, setSelectedRole] = useState(null);
 
-  useEffect(() => {
-    fetch("/api")
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, []);
+  const handleRoleSelection = (role) => {
+    setSelectedRole(role);
+  };
+
+  const renderContent = () => {
+    if (selectedRole === "student") {
+      return <StudentSignIn />;
+    } else if (selectedRole === "teacher") {
+      return <TeacherSignIn />;
+    } else {
+      return <Role onSelectRole={handleRoleSelection} />;
+    }
+  };
+
+  return <div className="container">{renderContent()}</div>;
+}
+
+function Role({ onSelectRole }) {
   return (
-    <div>
-      {typeof data.users === "undefined" ? (
-        <p>Loading ... </p>
-      ) : (
-        data.users.map((user, i) => <p>{user}</p>)
-      )}
+    <div className="wrapper">
+      <div>Select Your Role</div>
+      <div className="role">
+        <div className="card" onClick={() => onSelectRole("student")}>
+          Student
+        </div>
+        <div className="card" onClick={() => onSelectRole("teacher")}>
+          Teacher
+        </div>
+      </div>
+      {/* <button className="next">Next</button> */}
     </div>
   );
 }
