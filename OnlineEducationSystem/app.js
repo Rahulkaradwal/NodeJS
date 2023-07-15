@@ -46,7 +46,7 @@ const User = mongoose.model("User", userSchema);
 
 // Index route
 app.get("/", (req, res) => {
-  res.redirect("/index.html");
+  res.redirect("/signin.html");
 });
 
 // Signup route
@@ -74,13 +74,7 @@ app.post("/signup", (req, res) => {
       newUser
         .save()
         .then(() => {
-          if (role === "student") {
-            res.redirect("/signin.html");
-          } else if (role === "teacher") {
-            res.redirect("/teacher_signin.html");
-          } else {
-            res.redirect("/signin.html");
-          }
+          res.redirect("/signin.html");
         })
         .catch((error) => {
           console.error("Error creating user:", error);
